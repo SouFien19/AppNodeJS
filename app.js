@@ -1,45 +1,20 @@
 const express = require('express');
-const path = require('path');
+const auth = require('./routes/auth');
+const post = require('./routes/post');
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON
 app.use(express.json());
 
-// Sample data for /post/all
-const posts = [
-  { id: 1, name: 'soyfien', lastname: 'labiadh' },
-  { id: 2, name: 'ghaith', lastname: 'labiadh' },
-];
+app.get('/', (req, res) => {
 
-// Route for /auth/login
-app.get('/auth/login', (req, res) => {
-
-  res.sendFile(path.join(__dirname + '/login.html'));
+  res.send("<h1>Hello</h1>")
 });
 
-app.get('/auth/register', (req, res) => {
+app.use('/auth',auth); 
 
-  res.sendFile(path.join(__dirname + '/register.html'));
-});
-
-// Route for /post/all
-app.get('/post/all', (req, res) => {
-  // Return the array of posts as JSON
-  res.json(posts);
-});
-
-// Route for /post/:id
-app.get('/post/:id', (req, res) => {
-  const postId = parseInt(req.params.id);
-  const post = posts.find(post => post.id === postId);
-
-  if (post) {
-    res.json(post);
-  } else {
-    res.status(404).send('Post not found');
-  }
-});
+app.use('/post',post); 
 
 // Start the server
 app.listen(port, () => {
